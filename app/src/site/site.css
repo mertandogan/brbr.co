@@ -202,3 +202,4 @@
 .cstage::before{top:0;background:linear-gradient(var(--bg),transparent)}.cstage::after{bottom:0;background:linear-gradient(transparent,var(--bg))}
 .cstage>*{position:relative;z-index:1}
 .cstage::before,.cstage::after{height:clamp(56px,8vw,120px)}
+.cstage__word[data-k=ultra]{color:oklch(.49 .14 30)}.cstage__word[data-k=clay]{color:oklch(.49 .11 128)}.cstage__word[data-k=pomade]{color:oklch(.49 .14 22)}.cstage__word[data-k=gel]{color:oklch(.5 .12 58)}
