@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { BESTSELLERS, EDGE_STEPS, FAQS, FINDER, SHOP_URL, TYPES, WAX_FAMILY, WAX_STEPS, pimg } from "./data";
 
@@ -70,24 +70,73 @@ export function Marquee() {
   return <div className="marq" aria-hidden="true"><div className="marq__track">{row.map((w, i) => <span key={i}>{w}</span>)}</div></div>;
 }
 
+const STAGE: Record<string, { word: string; chips: string[] }> = {
+  ultra: { word: "Wax", chips: ["Ultra hold", "Keratin complex", "150 ml"] },
+  clay: { word: "Clay", chips: ["Strong hold", "Matte", "Tea tree", "150 ml"] },
+  powder: { word: "Powder", chips: ["Root lift", "Matte texture", "Light hold"] },
+  shave: { word: "Shave", chips: ["Transparent", "Pump", "1250 ml"] },
+  cologne: { word: "Cologne", chips: ["01 Pacific", "Spray"] },
+  pomade: { word: "Pomade", chips: ["Medium hold", "High shine", "Water-based"] },
+  gel: { word: "Gel", chips: ["Maximum hold", "Wet look"] },
+  sheen: { word: "Sheen", chips: ["Shine", "Olive oil", "500 ml"] },
+};
+
 export function Bestsellers() {
+  const ref = useRef<HTMLElement>(null);
+  useEffect(() => {
+    const root = ref.current;
+    if (!root) return;
+    const steps = Array.from(root.querySelectorAll<HTMLElement>(".cstep"));
+    const ticks = Array.from(root.querySelectorAll<HTMLElement>(".cticks a"));
+    const set = (k: string) => {
+      root.dataset.k = k;
+      steps.forEach((s) => s.classList.toggle("is-on", s.dataset.k === k));
+      ticks.forEach((t) => t.classList.toggle("is-on", t.dataset.k === k));
+    };
+    const io = new IntersectionObserver(
+      (es) => {
+        for (const e of es) if (e.isIntersecting) set((e.target as HTMLElement).dataset.k ?? "ultra");
+      },
+      { rootMargin: "-45% 0px -45% 0px" },
+    );
+    steps.forEach((s) => io.observe(s));
+    return () => io.disconnect();
+  }, []);
   return (
-    <section id="bestsellers" className="sec sec--light" aria-labelledby="best-h">
-      <div className="wrap">
-        <div className="sec__head rv">
-          <span className="eyebrow">Bestsellers</span>
-          <h2 id="best-h" className="disp">Barber favourites, in stock</h2>
-          <p className="lede">Eight shelf staples, from Gummy's ultra-hold wax to The Shave Factory's crystal-clear shaving gel. Tap any one to shop it.</p>
-        </div>
-        <div className="bento">
+    <section id="bestsellers" className="cstage" data-k="ultra" ref={ref} aria-labelledby="best-h">
+      <div className="wrap cstage__head">
+        <span className="eyebrow">Bestsellers</span>
+        <h2 id="best-h" className="disp">Barber favourites, in stock</h2>
+        <p className="lede">Eight shelf staples, from Gummy's ultra-hold wax to The Shave Factory's crystal-clear shaving gel. Scroll through them one by one.</p>
+      </div>
+      <div className="wrap cstage__grid">
+        <div className="cstage__stage">
+          {BESTSELLERS.map((p) => (
+            <span className="cstage__word" data-k={p.key} key={`w-${p.key}`} aria-hidden="true" style={{ fontSize: `min(24vw, ${Math.round(112 / STAGE[p.key].word.length)}vw)` }}>{STAGE[p.key].word}</span>
+          ))}
           {BESTSELLERS.map((p, i) => (
-            <a className="pcard rv" data-accent={p.accent} href={p.href} key={p.key}>
-              <div className="pcard__img"><img {...pimg(p.key, i === 0 ? "lg" : "sm")} alt={`${p.brand} ${p.name}`} loading={i < 2 ? "eager" : "lazy"} decoding="async" /></div>
-              <span className="pcard__brand">{p.brand}</span>
-              <h3>{p.name}</h3>
-              <p>{p.short}</p>
-              <span className="pcard__go">{p.cta}</span>
-            </a>
+            <div className="cstage__prod" data-k={p.key} key={`p-${p.key}`}>
+              <img {...pimg(p.key, "lg")} alt={`${p.brand} ${p.name}`} loading={i === 0 ? "eager" : "lazy"} decoding="async" />
+            </div>
+          ))}
+          <nav className="cticks" aria-label="Bestsellers">
+            {BESTSELLERS.map((p, i) => (
+              <a href={`#best-${p.key}`} data-k={p.key} key={`t-${p.key}`} className={i === 0 ? "is-on" : undefined}>{STAGE[p.key].word}</a>
+            ))}
+          </nav>
+        </div>
+        <div className="cstage__steps">
+          {BESTSELLERS.map((p, i) => (
+            <article id={`best-${p.key}`} className={`cstep${i === 0 ? " is-on" : ""}`} data-k={p.key} key={p.key}>
+              <div className="cstep__card">
+                <span className="cstep__n">{String(i + 1).padStart(2, "0")} / {String(BESTSELLERS.length).padStart(2, "0")}</span>
+                <span className="cstep__brand">{p.brand}</span>
+                <h3>{p.name}</h3>
+                <p>{p.short}</p>
+                <ul className="cstep__chips">{STAGE[p.key].chips.map((c) => <li key={c}>{c}</li>)}</ul>
+                <a className="btn btn--ink" href={p.href}>{p.cta}</a>
+              </div>
+            </article>
           ))}
         </div>
       </div>
