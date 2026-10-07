@@ -80,12 +80,15 @@ function buildHead(meta: AppMeta) {
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { title },
       { name: "description", content: description },
-      { name: "author", content: "Higgsfield" },
+      { name: "author", content: "brbr.co (Kotchak Ltd)" },
+      { name: "robots", content: "index, follow, max-image-preview:large" },
+      { name: "theme-color", content: "#0b0b0c" },
+      { property: "og:site_name", content: "brbr.co" },
+      { property: "og:locale", content: "en_GB" },
       { property: "og:title", content: title },
       { property: "og:description", content: description },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: ogImage ? "summary_large_image" : "summary" },
-      { name: "twitter:site", content: "@Higgsfield" },
       ...(ogImage
         ? [
             { property: "og:image", content: ogImage },
@@ -164,7 +167,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 
 function RootShell({ children }: { children: ReactNode }) {
   return (
-    <html lang="en" data-theme="default-dark" style={{ colorScheme: "dark" }}>
+    <html lang="en-GB" data-theme="default-dark" style={{ colorScheme: "dark" }}>
       {/* Marketplace apps are permanently dark: data-theme is pinned on <html>
           above. Do not add quanta's bootstrapScript/ThemeController, a theme
           toggle, or a light mode. */}
