@@ -201,3 +201,4 @@
 .cstage::before,.cstage::after{content:"";position:absolute;left:0;right:0;height:120px;pointer-events:none;z-index:0}
 .cstage::before{top:0;background:linear-gradient(var(--bg),transparent)}.cstage::after{bottom:0;background:linear-gradient(transparent,var(--bg))}
 .cstage>*{position:relative;z-index:1}
+.cstage::before,.cstage::after{height:clamp(56px,8vw,120px)}
