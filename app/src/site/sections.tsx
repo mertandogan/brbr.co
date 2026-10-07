@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type CSSProperties } from "react";
 
 import { BESTSELLERS, EDGE_STEPS, FAQS, FINDER, SHOP_URL, TYPES, WAX_FAMILY, WAX_STEPS, pimg } from "./data";
 
@@ -112,7 +112,7 @@ export function Bestsellers() {
       <div className="wrap cstage__grid">
         <div className="cstage__stage">
           {BESTSELLERS.map((p) => (
-            <span className="cstage__word" data-k={p.key} key={`w-${p.key}`} aria-hidden="true" style={{ fontSize: `min(24vw, ${Math.round(112 / STAGE[p.key].word.length)}vw)` }}>{STAGE[p.key].word}</span>
+            <span className="cstage__word" data-k={p.key} key={`w-${p.key}`} aria-hidden="true" style={{ "--len": STAGE[p.key].word.length } as CSSProperties}>{STAGE[p.key].word}</span>
           ))}
           {BESTSELLERS.map((p, i) => (
             <div className="cstage__prod" data-k={p.key} key={`p-${p.key}`}>
