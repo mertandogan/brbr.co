@@ -114,6 +114,7 @@ export function Bestsellers() {
           {BESTSELLERS.map((p) => (
             <span className="cstage__word" data-k={p.key} key={`w-${p.key}`} aria-hidden="true" style={{ "--len": STAGE[p.key].word.length } as CSSProperties}>{STAGE[p.key].word}</span>
           ))}
+          <div className="cstage__floor" aria-hidden="true" />
           {BESTSELLERS.map((p, i) => (
             <div className="cstage__prod" data-k={p.key} key={`p-${p.key}`}>
               <img {...pimg(p.key, "lg")} alt={`${p.brand} ${p.name}`} loading={i === 0 ? "eager" : "lazy"} decoding="async" />
