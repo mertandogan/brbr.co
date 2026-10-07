@@ -1,24 +1,64 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { useEffect } from "react";
 
 import { ScrollScrub } from "@/components/scroll-scrub/scroll-scrub";
 import { scrollScrubScenes, scrollScrubTheme } from "@/scroll-scrub-scenes";
+import { SITE_URL, jsonLd } from "@/site/data";
+import { Bestsellers, Edges, Faq, Finder, FloatingCta, Footer, Guides, Header, Intro, Marquee, ShaveFactory, Trust, WaxFamily } from "@/site/sections";
+import siteCss from "@/site/site.css?url";
 
 export const Route = createFileRoute("/")({
-  // No title/description here on purpose: the home page inherits the site's
-  // editable page metadata from the root route (title/favicon/og), so a shared
-  // link to "/" shows the owner's values. Add a `head` here only to give a
-  // SPECIFIC page its own title/description.
+  head: () => ({
+    links: [
+      { rel: "stylesheet", href: siteCss },
+      { rel: "canonical", href: `${SITE_URL}/` },
+      { rel: "preload", as: "image", href: "/assets/lifestyle/hero-lg.webp" },
+    ],
+    scripts: [{ type: "application/ld+json", children: JSON.stringify(jsonLd()) }],
+  }),
   component: Index,
 });
 
-// The whole page IS the journey: the scrub controller owns media time, while
-// every chapter stays server-rendered in ordinary semantic flow. Compose the
-// site's own nav and bespoke CTAs around <ScrollScrub />; the engine
-// deliberately ships no header, no shared button system, and no scroll hint.
 function Index() {
+  useEffect(() => {
+    const els = Array.from(document.querySelectorAll<HTMLElement>(".rv"));
+    if (!("IntersectionObserver" in window)) {
+      els.forEach((e) => e.classList.add("is-in"));
+      return;
+    }
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const en of entries) {
+          if (en.isIntersecting) {
+            en.target.classList.add("is-in");
+            io.unobserve(en.target);
+          }
+        }
+      },
+      { rootMargin: "0px 0px -8% 0px" },
+    );
+    els.forEach((e) => io.observe(e));
+    return () => io.disconnect();
+  }, []);
+
   return (
-    <main>
-      <ScrollScrub scenes={scrollScrubScenes} theme={scrollScrubTheme} />
-    </main>
+    <div className="brbr">
+      <Header />
+      <main id="top">
+        <Intro />
+        <ScrollScrub scenes={scrollScrubScenes} theme={scrollScrubTheme} />
+        <Marquee />
+        <Bestsellers />
+        <Edges />
+        <WaxFamily />
+        <ShaveFactory />
+        <Finder />
+        <Guides />
+        <Faq />
+        <Trust />
+      </main>
+      <Footer />
+      <FloatingCta />
+    </div>
   );
 }
