@@ -670,7 +670,7 @@ export function ScrollScrub({
           if (!scene) {
             return null;
           }
-          const Heading = segment.sectionIndex === 0 ? "h1" : "h2";
+          const Heading = "h2"; // brbr.co: the page H1 lives in the intro above the journey
 
           return (
             <article
