@@ -210,3 +210,4 @@
 .cstage__prod::after{content:"";position:absolute;left:16%;right:16%;bottom:-3%;height:10%;z-index:-1;background:radial-gradient(closest-side,rgba(23,19,15,.38),rgba(23,19,15,0));filter:blur(3px)}
 .cticks{z-index:3}
 @media (max-width:899px){.cstage__word{top:3cqh;font-size:min(calc(170cqw / var(--len, 4)), 42cqh)}.cstage__prod{inset:38% 12% 6%}}
+.cstage__steps{padding-bottom:14vh}@media (max-width:899px){.cstage__stage{top:72px}.cstage__word{top:2cqh}.cstage__steps{padding-bottom:10svh}}
