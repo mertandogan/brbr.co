@@ -82,7 +82,6 @@ function buildHead(meta: AppMeta) {
       { name: "description", content: description },
       { name: "author", content: "brbr.co (Kotchak Ltd)" },
       { name: "robots", content: "index, follow, max-image-preview:large" },
-      { name: "theme-color", content: "#0b0b0c" },
       { property: "og:site_name", content: "brbr.co" },
       { property: "og:locale", content: "en_GB" },
       { property: "og:title", content: title },
