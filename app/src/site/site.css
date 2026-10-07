@@ -192,3 +192,4 @@
 .cstep__chips li{padding:8px 14px;border-radius:999px;border:1.5px solid rgba(23,19,15,.24);font-size:.85rem;font-weight:600}
 @media (max-width:899px){.cticks{display:none}.cstage__stage{top:56px;height:50svh;z-index:1}.cstep{min-height:72svh;justify-content:flex-end;padding:0 0 32px;position:relative;z-index:2;opacity:1}.cstep__card{padding:20px;border-radius:22px;background:rgba(255,255,255,.62);backdrop-filter:blur(12px)}.cstep h3{font-size:clamp(2.2rem,10vw,3rem)}}
 @media (prefers-reduced-motion:reduce){.cstage,.cstage__prod,.cstage__word,.cstep{transition:none}.cstage__prod img{animation:none}}
+.cstage__prod img{position:absolute;inset:0;width:100%;height:100%}
