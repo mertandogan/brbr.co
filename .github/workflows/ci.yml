@@ -1,22 +1,30 @@
-name: Template CI
+name: CI
 
 on:
   push:
     branches:
       - main
+  pull_request:
   workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   validate:
-    runs-on: arc-runners-frontend
-    name: Validate template
-    # The app project lives in app/ (ci/ holds the deploy config, AGENTS.md +
-    # skills/ stay at root). Every build step runs there.
+    runs-on: ubuntu-latest
+    name: Validate site
+    timeout-minutes: 15
     defaults:
       run:
         working-directory: app
     steps:
       - uses: actions/checkout@v6
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
 
       - uses: oven-sh/setup-bun@v2
 
@@ -32,10 +40,12 @@ jobs:
       - name: Test
         run: bun run test
 
-      # Deploys always ship the design inspector: apps-ci / apps-ci-dev export
-      # HF_DESIGN_INSPECTOR=1 before `bun run build`. Validate that exact
-      # artifact here — one build, not a separate plain + design pair.
-      - name: Build (design inspector on, as deploys ship it)
-        env:
-          HF_DESIGN_INSPECTOR: "1"
+      - name: Build
         run: bun run build
+
+      - name: Upload build output
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: app/dist
+          retention-days: 7
